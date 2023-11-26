@@ -14,17 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.http import request
-from django.urls import path
-
-from OrientDB.OrientDB.apps.tf_idf import views as tf_idf
-from OrientDB.OrientDB.apps.page_rank import views as page_rank
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-
-    path('page-rank/manual', page_rank.pageRankLib(request), name='manual'),
-    path('page-rank/lib', page_rank.pageRankManual(request), name='lib'),
-
-    path('tf-idf/manual', tf_idf.TFIDFManual(request), name='manual'),
-    path('tf-idf/lib', tf_idf.TFIDFLib(request), name='lib'),
+    path('admin/', admin.site.urls),
+    path('page-rank', include('page_rank.urls')),
+    path('tf-idf', include('tf_idf.urls')),
 ]

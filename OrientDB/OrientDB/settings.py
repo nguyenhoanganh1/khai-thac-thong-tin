@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'page_rank',
+    'tf_idf',
 ]
 
 MIDDLEWARE = [
@@ -73,20 +75,19 @@ WSGI_APPLICATION = 'OrientDB.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DJANGORIENT_SETTINGS = {
+#     'host': 'localhost',
+#     'port': '2480',
+#     'username': 'root',
+#     'password': 'admin',
+#     'name': 'orient-demo',
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Use a placeholder engine
-        'NAME': 'session',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '2424',  # Default OrientDB port
-        'OPTIONS': {
-            'backend': 'pyorient',
-        },
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

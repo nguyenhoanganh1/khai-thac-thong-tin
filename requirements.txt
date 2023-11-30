@@ -1,0 +1,10 @@
+typer==0.3.2
+colorama==0.4.4
+shellingham==1.4.0
+pytest==6.2.4
+pyorient==1.5.5
+pyspark==3.1.2
+pyspark_stubs==3.0.0.post3
+python-string-utils==1.0.0
+inject==5.2.0
+rest_framework==

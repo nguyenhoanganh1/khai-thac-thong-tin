@@ -1,0 +1,18 @@
+==== Cài đặt thư viện
+- pip install -r requirements.txt
+
+
+==== Tạo module mới:
+- python manage.py startapp <module_name>
+
+
+==== pyorient version 1.5.5 => orientdb version 3.0.2 => xuất hiện lỗi protocol
+- Vào file venv > lib > python3.12 > pyorient > constants.py
+- Sửa về :
+            NAME = "OrientDB Python binary client (pyorient)"
+            VERSION = "1.5.5"
+            SUPPORTED_PROTOCOL = 37
+
+
+==== Query OrientDB
+- truy cập vào link: https://github.com/mogui/pyorient để xem cách query

@@ -106,6 +106,7 @@ class OrientDBConfig:
 
     def record_create_in_table(self, table, request):
         # request = { '@my_class': { 'accommodation': 'house', 'work': 'office', 'holiday': 'sea' } }
+        print(table, request)
         client = self.get_orient_client()
         return client.record_create(table, request)
 
@@ -123,3 +124,44 @@ class OrientDBConfig:
     def record_delete(self, cluster_id, rec_position_rid):
         client = self.get_orient_client()
         return client.record_delete(cluster_id, rec_position_rid)
+
+
+    """
+    Create Node
+    """
+
+    def create_node(self, class_name, node_data_list):
+        client = self.get_orient_client()
+        try:
+            for node_data in node_data_list:
+                create_node_query = f"insert into {class_name} set name = '{node_data.get('name')}', url = '{node_data.get('url')}'"
+                client.command(create_node_query)
+        finally:
+            client.db_close()
+
+    def create_node_and_relations(self, node_data, in_neighbors_data, class_name='WebsiteRelation'):
+        client = self.get_orient_client()
+
+        try:
+            create_node_query = f"CREATE VERTEX Website SET {node_data}"
+            node_result = client.command(create_node_query)
+            node_rid = node_result[0]._rid
+
+            # Tạo các in-neighbors và thiết lập quan hệ
+            for neighbor_data in in_neighbors_data:
+                create_neighbor_query = f"CREATE EDGE {class_name} FROM {neighbor_data['in']} TO {node_rid} SET {neighbor_data}"
+                client.command(create_neighbor_query)
+
+        finally:
+            # Đóng kết nối sau khi sử dụng
+            client.db_close()
+
+    def create_relationship(self, class_name, relationship_data_list):
+        client = self.get_orient_client()
+        try:
+            for rel_data in relationship_data_list:
+                create_rel_query = f"CREATE EDGE {class_name} FROM {rel_data['out']} TO {rel_data['in']} SET weight = :weight"
+                params = {'weight': rel_data.get('weight', 1)}
+                client.command(create_rel_query, params)
+        finally:
+            client.db_close()

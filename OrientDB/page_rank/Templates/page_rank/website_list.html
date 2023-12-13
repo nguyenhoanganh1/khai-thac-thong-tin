@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+  <h2>Website List</h2>
+  <ul>
+    {% for website in websites %}
+      <li>{{ website.name }} - {{ website.url }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+</body>
+</html>

@@ -2,7 +2,7 @@ class QueryUtil:
 
     @staticmethod
     def create_class(tableName: str, supperTable):
-        return "create class {} extends {}".format(tableName, supperTable)
+        return "create class {} if not exists extends {}".format(tableName, supperTable)
 
     @staticmethod
     def create_database(databaseName: str):

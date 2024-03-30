@@ -4,34 +4,26 @@
     <facet type="django" name="Django">
       <configuration>
         <option name="rootFolder" value="$MODULE_DIR$" />
-        <option name="settingsModule" value="" />
-        <option name="manageScript" value="" />
+        <option name="settingsModule" value="demo/settings.py" />
+        <option name="manageScript" value="$MODULE_DIR$/manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
-        <option name="trackFilePattern" value="" />
+        <option name="trackFilePattern" value="migrations" />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$/OrientDB">
-      <sourceFolder url="file://$MODULE_DIR$/OrientDB" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/OrientDB" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12" jdkType="Python SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-  <component name="PyNamespacePackagesService">
-    <option name="namespacePackageFolders">
-      <list>
-        <option value="$MODULE_DIR$/OrientDB" />
-      </list>
-    </option>
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/OrientDB" />
+        <option value="$MODULE_DIR$/templates" />
       </list>
     </option>
   </component>

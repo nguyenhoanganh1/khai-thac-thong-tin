@@ -1,0 +1,3 @@
+pyorient==1.5.5
+pyspark==3.5.0
+pyhadoop==2.0.0

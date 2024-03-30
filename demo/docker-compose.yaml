@@ -1,0 +1,129 @@
+version: "3.8"
+
+services:
+  db:
+    image: orientdb:latest
+    container_name: orient_db_container
+    ports:
+      - "2424:2424"
+      - "2480:2480"
+    environment:
+      ORIENTDB_ROOT_USERNAME: admin
+      ORIENTDB_ROOT_PASSWORD: admin
+      ORIENTDB_ROOT_EMAIL: root@example.com
+    volumes:
+      - orientdb_data:/orientdb/databases
+    networks:
+      - orient
+    restart: always
+
+  postgres:
+    image: postgres:12-alpine
+    container_name: my_postgres_db
+    ports:
+      - "5555:5432"
+    environment:
+      POSTGRES_DB: session
+      POSTGRES_PASSWORD: "123456"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - orient
+    restart: always
+
+  spark-master:
+    image: bitnami/spark:latest
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_HOST=spark
+    ports:
+      - "4040:4040" # Spark UI
+      - "6066:6066" # Spark Master
+      - "7077:7077" # Spark Master Web UI
+      - "8080:8080" # Spark Worker Web UI
+      - "8081:8081" # Spark Application UI
+    networks:
+      - orient
+    volumes:
+      - ./apps:/opt/spark-apps
+      - ./data:/opt/spark-data
+
+  spark-worker:
+    container_name: spark-worker
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+    depends_on:
+      - spark-master
+    networks:
+      - orient
+    volumes:
+        - ./apps:/opt/spark-apps
+        - ./data:/opt/spark-data
+
+  namenode:
+    image: sequenceiq/hadoop-docker:latest
+    container_name: namenode
+    command: /etc/bootstrap.sh -d -namenode
+    environment:
+      - CLUSTER_NAME=my-hadoop-cluster
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    ports:
+      - "50070:50070"
+      - "9000:9000"
+    volumes:
+      - ./data/namenode:/tmp/hadoop-root/dfs/name
+    networks:
+      - orient
+
+  datanode:
+    image: sequenceiq/hadoop-docker:latest
+    container_name: datanode
+    environment:
+      - CLUSTER_NAME=my-hadoop-cluster
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    command: /etc/bootstrap.sh -d -datanode
+    ports:
+      - "9864:9864"
+    links:
+      - namenode
+    volumes:
+      - ./data/datanode:/tmp/hadoop-root/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      - orient
+
+  resourcemanager:
+    image: sequenceiq/hadoop-docker:latest
+    container_name: resourcemanager
+    command: /etc/bootstrap.sh -d -resourcemanager
+    ports:
+      - "8088:8088"
+      - "50071:50070"
+    links:
+      - namenode
+    networks:
+      - orient
+
+  nodemanager:
+    image: sequenceiq/hadoop-docker:latest
+    container_name: nodemanager
+    command: /etc/bootstrap.sh -d -nodemanager
+    links:
+      - namenode
+      - resourcemanager
+    networks:
+      - orient
+volumes:
+  postgres:
+  orientdb_data:
+  apps:
+  data:
+
+networks:
+  orient:
+    name: orient
+    driver: bridge
